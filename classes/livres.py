@@ -22,9 +22,20 @@ class Bibliotheque():
     def removeMedia(self,id):
         self.db.delete_one({ "_id": ObjectId(id)})
 
-    def findByTitle(self,selec):
+    def findByTitle(self,selec,tri):
         publi_tab=[]
-        query2=self.db.aggregate([{"$project":{"type":1,"title":1,"authors":1,"year":1}},{"$match":{"title":{"$regex":selec}}}])
+        pipe = []
+        pipe.append({"$project":{"type":1,"title":1,"authors":1,"year":1}})
+        pipe.append({"$match": {"title":{"$regex":selec}}})
+        if tri==1:
+            pipe.append({"$sort":{"authors":1}})
+        elif tri==2:
+            pipe.append({"$sort":{"year":1}})
+        elif tri==3:
+            pipe.append({"$sort":{"title":1}})
+        pipe.append({"$limit":5})
+        query2=self.db.aggregate(pipe)
+
         for item in query2:
             if item["type"]=="Book" or item["type"]=="Livre":
                 new_publi = Livre(self.db, item["_id"])
@@ -35,9 +46,20 @@ class Bibliotheque():
             publi_tab.append(new_publi)    
         return publi_tab
     
-    def findByAuthors(self,selec):
+    def findByAuthors(self,selec,tri):
+        pipe = []
+        pipe.append({"$project":{"type":1,"title":1,"authors":1,"year":1}})
+        pipe.append({"$match": {"authors":{"$regex":selec}}})
+        if tri==1:
+            pipe.append({"$sort":{"authors":1}})
+        elif tri==2:
+            pipe.append({"$sort":{"year":1}})
+        elif tri==3:
+            pipe.append({"$sort":{"title":1}})
+        pipe.append({"$limit":5})
+        query2=self.db.aggregate(pipe)
+
         publi_tab=[]
-        query2=self.db.aggregate([{"$project":{"type":1,"title":1,"authors":1,"year":1}},{"$match": {"authors":{"$eq":selec}}}])
         for item in query2:
             if item["type"]=="Book" or item["type"]=="Livre":
                 new_publi = Livre(self.db, item["_id"])
@@ -48,9 +70,21 @@ class Bibliotheque():
             publi_tab.append(new_publi)  
         return publi_tab
     
-    def findByYear(self,selec):
+    def findByYear(self,selec,tri):
         publi_tab=[]
-        query2=self.db.aggregate([{"$project":{"type":1,"title":1,"authors":1,"year":1}},{"$match": {"year":{"$eq":selec}}}])
+        # Construit le pipeline d'agregate mongo
+        pipe = []
+        pipe.append({"$project":{"type":1,"title":1,"authors":1,"year":1}})
+        pipe.append({"$match": {"year":{"$regex":selec}}})
+        if tri==1:
+            pipe.append({"$sort":{"authors":1}})
+        elif tri==2:
+            pipe.append({"$sort":{"year":1}})
+        elif tri==3:
+            pipe.append({"$sort":{"title":1}})
+        pipe.append({"$limit":5})
+        query2=self.db.aggregate(pipe)
+
         for item in query2:
             if item["type"]=="Book" or item["type"]=="Livre":
                 new_publi = Livre(self.db, item["_id"])
@@ -60,8 +94,19 @@ class Bibliotheque():
                 continue
             publi_tab.append(new_publi)  
         return publi_tab
-    
-    
+
+    def filteredByBook(self,title,publi):
+        for item in publi:
+            if item.title==title:
+                print(item)
+    def filteredByAuthors(self,auteur,publi):
+        for item in publi:
+            if item.auteur==auteur:
+                print(item)
+    def filteredByYear(self,year,publi):
+        for item in publi:
+            if item.year==year:
+                print(item)
 
     
 
