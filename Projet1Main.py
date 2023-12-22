@@ -2,31 +2,25 @@ from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 import pymongo
 import pprint
-from fonctions import*
+from classes.fonctions import *
 from bson.objectid import ObjectId
-
-
+from classes.livres import *
 
 client = MongoClient("localhost",27017)
 db=client["my-first-db"]     
 coll = db["books"]
-# Send a ping to confirm a successful connection
-try:
-    client.admin.command('ping')
-    print("Connexion OK")
-except Exception as e:
-    print(e)
+bibli=Bibliotheque(coll)
+
 
 def Menu():
-
     while True:
-        choix=int(input("Faites votre choix dans ce menu : \n 1- Rechercher un livre : \n 2- Ajouter une publication : \n 3- Supprimer un livre\n 4- Quitter l'application : "))
+        choix=int(input("Faites votre choix dans ce menu : \n 1- Rechercher un livre : \n 2- Ajouter une publication : \n 3- Supprimer un livre\n 4- Quitter l'application : \n"))
         if choix==1:
-            rechercherLivre(coll)
+            rechercherMedia(bibli)
         elif choix==2:
-            ajouterPubli(coll)
+            ajouterPubli(bibli)
         elif choix==3:
-            supprimerPubli(coll)
+            supprimerPubli(bibli)
         elif choix==4:
            break
         
