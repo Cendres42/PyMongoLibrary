@@ -5,31 +5,36 @@ import pprint
 from classes.fonctions import *
 from bson.objectid import ObjectId
 from classes.livres import *
+from bson.errors import InvalidId
 
+# création des variables liées à la base de donnnées
 client = MongoClient("localhost",27017)
 db=client["my-first-db"]     
 coll = db["books"]
 bibli=Bibliotheque(coll)
-
-
+#
+#@ brief fonction de menu proposant à l'utilisateur différents choix 
+#
 def Menu():
     while True:
-        choix=int(input("Faites votre choix dans ce menu : \n 1- Rechercher un livre : \n 2- Ajouter une publication : \n 3- Supprimer un livre\n 4- Quitter l'application : \n"))
-        if choix==1:
-            rechercherMedia(bibli)
-        elif choix==2:
-            ajouterPubli(bibli)
-        elif choix==3:
-            supprimerPubli(bibli)
-        elif choix==4:
-           break
+        try:
+            choix=int(input("Faites votre choix dans ce menu : \n 1- Rechercher un livre :\n 2- Ajouter une publication : \n 3- Supprimer un livre\n 4- Quitter l'application : \n"))
+            if choix<0 or choix>4:
+                raise ValueError
+        except ValueError:
+            print("Votre choix doit être un chiffre entre 1 et 4")
+        else:    
+            if choix==1:
+                rechercherMedia(bibli)
+            elif choix==2:
+                ajouterPubli(bibli)
+            elif choix==3:
+                supprimerPubli(bibli)
+            elif choix==4:
+                break
+
         
 Menu()
-"""
-query=coll.aggregate([{"$match": {"type":{"$eq":"Article"},"year":{"$eq":2006}}},{"$limit":5}])
-for item in query:
-    print(item)
-"""
-#print(db["books"].index_information())
+
 
     
