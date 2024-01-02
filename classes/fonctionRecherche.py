@@ -99,28 +99,34 @@ def rechercherMedia(bibli,result):
                     else:
                         publi=bibli.findByYear(sous_selection,tri,toSkip)
                         print(publi)
-            next=int(input("Pour afficher les 5 résultats suivants tapez 1 \n sinon tapez 2\n"))
-            if next==1:
-                toSkip+=5
-            elif next==2:
-                x= menuChoice(bibli,publi)
-                if x==0:
-                    break
-                elif x==1:
-                    selection = 0
-                    tri = 0
-                    sous_selection = ""
-                    toSkip=0
-                    result=""
-                    tofiltre=""
-                    typefiltre=""
-                    filtre=""
-                elif x==2:
-                    toSkip=0
-                    result=filtreMedia()
-                    result2=result.split(":")
-                    typefiltre=result2[0]
-                    filtre=result2[1]
+            try:
+                next=int(input("Pour afficher les 5 résultats suivants tapez 1 \n sinon tapez 2\n"))
+                if next<=0 or next>2:
+                    raise ValueError
+            except ValueError:
+                print("Vous devez saisir 1 ou 2")
+            else:
+                if next==1:
+                    toSkip+=5
+                elif next==2:
+                    x= menuChoice(bibli,publi)
+                    if x==0:
+                        break
+                    elif x==1:
+                        selection = 0
+                        tri = 0
+                        sous_selection = ""
+                        toSkip=0
+                        result=""
+                        tofiltre=""
+                        typefiltre=""
+                        filtre=""
+                    elif x==2:
+                        toSkip=0
+                        result=filtreMedia()
+                        result2=result.split(":")
+                        typefiltre=result2[0]
+                        filtre=result2[1]
 
 
 

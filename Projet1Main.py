@@ -8,6 +8,7 @@ from bson.objectid import ObjectId
 from classes.livres import *
 from bson.errors import InvalidId
 from classes.fonctionSuppression import *
+from main2 import *
 
 # création des variables liées à la base de donnnées
 client = MongoClient("localhost",27017)
@@ -21,7 +22,9 @@ result=""
 def Menu():
     while True:
         try:
-            choix=int(input("Faites votre choix dans ce menu : \n 1- Rechercher un livre :\n 2- Ajouter une publication : \n 3- Supprimer un livre\n 4- Quitter l'application : \n"))
+            #choix=int(input("Faites votre choix dans ce menu : \n 1- Rechercher un livre :\n 2- Ajouter une publication : \n 3- Supprimer un livre\n 4- Quitter l'application : \n"))
+            menu=Menuprincipal()
+            choix=menu.open()
             if choix<=0 or choix>4:
                 raise ValueError
         except ValueError:
@@ -38,6 +41,7 @@ def Menu():
 
         
 Menu()
+
 """
 pipe = []
 tofiltre="year"

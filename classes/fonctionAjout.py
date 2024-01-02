@@ -155,8 +155,8 @@ def ajouterPubli(bibli):
         # Si la touche "Entree" a ete pressee
         if k in [10,13, curses.KEY_ENTER]:
             # Re-ecrit la zone noire ... pour la remettre en bleu
-            for i in range(1,11):
-                box1.addstr(i, 3, "                                                ", curses.color_pair(2))
+            for i in range(2,13):
+                box1.addstr(i, 3, "                                              ", curses.color_pair(2))
 
             # Dis bonjour a l'utilisateur
             box1.addstr(2,3, "Vous avez ajouté cette publication ")
