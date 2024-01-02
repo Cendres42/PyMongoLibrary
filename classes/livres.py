@@ -5,53 +5,64 @@ from bson.objectid import ObjectId
 class Bibliotheque():
     def __init__(self,db):
         self.db=db
-
-    # une bibliothèque peut créer des livres
+    
+    # @brief une bibliothèque peut créer des livres
     def createBook(self,title,auteur,year):
         livre=Livre(self.db)
         self.filMedia(livre,title,auteur,year)
         livre.save()
-    # une bibliothèque peut créer des articles
+    
+    # @brief une bibliothèque peut créer des articles
     def createArticle(self,title,auteur,year):
         article=Article(self.db)
         self.filMedia(article,title,auteur,year)
         article.save()
-
+    
+    # @brief méthode qui remplit un objet avec les inputs communs à tous les médias
     def filMedia(self,objet,title,auteur,year):
         objet.title=title
         objet.auteur=auteur
         objet.year=year
         print(objet.title,objet.auteur,objet.year)
-        
+    
+    # @brief méthode   qui supprime une publi à partir de son id 
     def removeMediabyID(self,id):
         self.db.delete_one({ "_id": ObjectId(id)})
-
+    
+    # @brief méthode   qui supprime des publis à partir de leur auteur
     def removeMediabyAuteur(self,auteur):
         result=self.db.delete_many({ "authors": auteur})
         return result.deleted_count
-       
+    
+    # @brief méthode   qui supprime une publi à partie de son titre  
     def removeMediabyTitre(self,titre):
         result=self.db.delete_one({ "title": titre})
         return result.deleted_count
     
+    # @brief méthode   qui supprime des publis à partir de leur auteur
     def removeMediabyMulti(self,auteur,year):
         result=self.db.delete_many({ "authors": auteur,"year": year})
         return result.deleted_count
 
-    def findByTitle(self,selec,tri):
-        publi_tab=[]
+    # @brief méthode   qui affiche les 5 premières publis à partir de leur titre
+    def findByTitle(self,selec,tri,toSkip,tofiltre="",filtre=""):
+        # Construit le pipeline d'agregate mongo
         pipe = []
         pipe.append({"$project":{"type":1,"title":1,"authors":1,"year":1}})
         pipe.append({"$match": {"title":{"$regex":selec}}})
+        if filtre!="":
+            pipe.append({"$match": {tofiltre:filtre}})
         if tri==1:
             pipe.append({"$sort":{"authors":1}})
         elif tri==2:
             pipe.append({"$sort":{"year":1}})
         elif tri==3:
             pipe.append({"$sort":{"title":1}})
+        pipe.append({"$skip":toSkip})
         pipe.append({"$limit":5})
         query2=self.db.aggregate(pipe)
 
+        publi_tab=[]
         for item in query2:
             if item["type"]=="Book" or item["type"]=="Livre":
                 new_publi = Livre(self.db, item["_id"])
@@ -62,16 +73,21 @@ class Bibliotheque():
             publi_tab.append(new_publi)    
         return publi_tab
     
-    def findByAuthors(self,selec,tri):
+    # @brief méthode   qui affiche les 5 premières publis à partir de leur auteur
+    def findByAuthors(self,selec,tri,toSkip,tofiltre="",filtre=""):
+        # Construit le pipeline d'agregate mongo
         pipe = []
         pipe.append({"$project":{"type":1,"title":1,"authors":1,"year":1}})
-        pipe.append({"$match": {"authors":{"$regex":selec}}})
+        pipe.append({"$match": {"authors":selec}})
+        if filtre!="":
+            pipe.append({"$match": {tofiltre:filtre}})
         if tri==1:
             pipe.append({"$sort":{"authors":1}})
         elif tri==2:
             pipe.append({"$sort":{"year":1}})
         elif tri==3:
             pipe.append({"$sort":{"title":1}})
+        pipe.append({"$skip":toSkip})
         pipe.append({"$limit":5})
         query2=self.db.aggregate(pipe)
 
@@ -86,21 +102,26 @@ class Bibliotheque():
             publi_tab.append(new_publi)  
         return publi_tab
     
-    def findByYear(self,selec,tri):
-        publi_tab=[]
+    # @brief méthode   qui affiche les 5 premières publis à partir de leur année de publi
+    def findByYear(self,selec,tri,toSkip,tofiltre="",filtre=""):
+        # création nouvelle recherche
         # Construit le pipeline d'agregate mongo
         pipe = []
         pipe.append({"$project":{"type":1,"title":1,"authors":1,"year":1}})
-        pipe.append({"$match": {"year":{"$regex":selec}}})
+        pipe.append({"$match": {"year":selec}})
+        if filtre!="":
+            pipe.append({"$match": {tofiltre:filtre}})
         if tri==1:
             pipe.append({"$sort":{"authors":1}})
         elif tri==2:
             pipe.append({"$sort":{"year":1}})
         elif tri==3:
             pipe.append({"$sort":{"title":1}})
+        pipe.append({"$skip":toSkip})
         pipe.append({"$limit":5})
         query2=self.db.aggregate(pipe)
-
+        
+        publi_tab=[]
         for item in query2:
             if item["type"]=="Book" or item["type"]=="Livre":
                 new_publi = Livre(self.db, item["_id"])
@@ -110,24 +131,12 @@ class Bibliotheque():
                 continue
             publi_tab.append(new_publi)  
         return publi_tab
-
-    def filteredByBook(self,title,publi):
-        for item in publi:
-            if item.title==title:
-                print(item)
-    def filteredByAuthors(self,auteur,publi):
-        for item in publi:
-            if item.auteur==auteur:
-                print(item)
-    def filteredByYear(self,year,publi):
-        for item in publi:
-            if item.year==year:
-                print(item)
+    
 #
 # @brief Création d'une classe Media, parente de Livre et Article   
 # @param  la base de donnée et l'id de l'objet à créer
 # un media a un type, un titre, un auteur, une année de publi, un id et est rattaché à une bd
-
+#
 class Media():
     def __init__(self,db,id=""):
         self._type=""
@@ -138,7 +147,7 @@ class Media():
         self._db=db
         # les publi de la bd deviennent des objets
         if self._id != "":
-            obj = db.find_one({"_id":self.id})
+            obj = db.find_one({"_id":self._id})
             self.type=obj["type"]
             self.title= obj["title"] 
             self.auteur=obj["authors"]
@@ -226,9 +235,11 @@ class Article(Media):
         super().__init__(db,id)
         self.type="Article"
         self.booktitle=""
-    #fonction pour ajout revue qui a publié article
+
+    # @brief méthode pour ajout revue qui a publié article
     def setBooktitle(self,name):
         self.booktitle=name
+    
+    #@ brief méthode d'insertion de l'article dans la bd MongoDB
     def save(self):
-        #insertion de l'article dans la bd MongoDB
         self._db.insert_one({ "type": self.type, "title" : self.title, "year":self.year, "authors": self.auteur,"booktitle":self.booktitle})
