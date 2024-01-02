@@ -23,8 +23,20 @@ class Bibliotheque():
         objet.year=year
         print(objet.title,objet.auteur,objet.year)
         
-    def removeMedia(self,id):
+    def removeMediabyID(self,id):
         self.db.delete_one({ "_id": ObjectId(id)})
+
+    def removeMediabyAuteur(self,auteur):
+        result=self.db.delete_many({ "authors": auteur})
+        return result.deleted_count
+       
+    def removeMediabyTitre(self,titre):
+        result=self.db.delete_one({ "title": titre})
+        return result.deleted_count
+    
+    def removeMediabyMulti(self,auteur,year):
+        result=self.db.delete_many({ "authors": auteur,"year": year})
+        return result.deleted_count
 
     def findByTitle(self,selec,tri):
         publi_tab=[]

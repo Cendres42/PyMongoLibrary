@@ -7,6 +7,7 @@ from classes.fonctionAjout import *
 from bson.objectid import ObjectId
 from classes.livres import *
 from bson.errors import InvalidId
+from classes.fonctionSuppression import *
 
 # création des variables liées à la base de donnnées
 client = MongoClient("localhost",27017)
