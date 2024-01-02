@@ -3,6 +3,7 @@ from pymongo.server_api import ServerApi
 import pymongo
 import pprint
 from classes.fonctions import *
+from classes.fonctionAjout import *
 from bson.objectid import ObjectId
 from classes.livres import *
 from bson.errors import InvalidId

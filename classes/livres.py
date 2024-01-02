@@ -1,23 +1,27 @@
 from bson.objectid import ObjectId
 
+#Création d'une classe Bibliothèque  
 
 class Bibliotheque():
     def __init__(self,db):
         self.db=db
+
+    # une bibliothèque peut créer des livres
     def createBook(self,title,auteur,year):
         livre=Livre(self.db)
         self.filMedia(livre,title,auteur,year)
         livre.save()
-
+    # une bibliothèque peut créer des articles
     def createArticle(self,title,auteur,year):
         article=Article(self.db)
         self.filMedia(article,title,auteur,year)
         article.save()
 
     def filMedia(self,objet,title,auteur,year):
-        objet.setTitle(title)
-        objet.setAuteur(auteur)
-        objet.setYear(year)
+        objet.title=title
+        objet.auteur=auteur
+        objet.year=year
+        print(objet.title,objet.auteur,objet.year)
         
     def removeMedia(self,id):
         self.db.delete_one({ "_id": ObjectId(id)})
@@ -107,57 +111,112 @@ class Bibliotheque():
         for item in publi:
             if item.year==year:
                 print(item)
-
-    
+#
+# @brief Création d'une classe Media, parente de Livre et Article   
+# @param  la base de donnée et l'id de l'objet à créer
+# un media a un type, un titre, un auteur, une année de publi, un id et est rattaché à une bd
 
 class Media():
     def __init__(self,db,id=""):
-        self.type=""
-        self.title=""
-        self.auteur=""
-        self.year=0
-        self.id=id
-        self.db=db
-        if self.id != "":
+        self._type=""
+        self._title=""
+        self._auteur=""
+        self._year=0
+        self._id=id
+        self._db=db
+        # les publi de la bd deviennent des objets
+        if self._id != "":
             obj = db.find_one({"_id":self.id})
-            self.setTitle( obj["title"] )
-            self.setType(obj["type"])
-            self.setAuteur(obj["authors"])
-            self.setYear(obj["year"])
-    def setType(self,type):
-        self.type=type
-    def setTitle(self,title):
-        self.title=title
-    def setAuteur(self,auteur):
-        self.auteur=auteur
-    def setYear(self,year):
-        self.year=year
-    
+            self.type=obj["type"]
+            self.title= obj["title"] 
+            self.auteur=obj["authors"]
+            self.year=obj["year"]
+    #définition de properties pour type, titre, auteur et année de publi
+    @property
+    def type(self)->str:
+        return(self._type)
+    @type.setter
+    def type(self, new_nom):
+        self._type = new_nom
+    @type.deleter
+    def type(self):
+       del self._type
+    @type.getter
+    def type(self):
+       return self._type
+
+    @property
+    def title(self)->str:
+        return(self._title)
+    @title.setter
+    def title(self, new_nom):
+        self._title = new_nom
+    @title.deleter
+    def title(self):
+       del self._title
+    @title.getter
+    def title(self):
+       return self._title
+
+    @property
+    def auteur(self)->str:
+        return(self._auteur)
+    @auteur.setter
+    def auteur(self, new_nom):
+        self._auteur = new_nom
+    @auteur.deleter
+    def auteur(self):
+       del self._auteur
+    @auteur.getter
+    def auteur(self):
+       return self._auteur
+
+    @property
+    def year(self)->str:
+        return(self._year)
+    @year.setter
+    def year(self, new_nom):
+        self._year = new_nom
+    @year.deleter
+    def year(self):
+       del self._year
+    @year.getter
+    def year(self):
+       return self._year
+
+    # création méthode magique __repr__ pour affichage données objet
     def __repr__(self):
         return(f"Type : {self.type}\n Titre :{self.title}\n Auteur : {self.auteur}\n Année de parution : {self.year}")
-
-    
-    
+#
+# @brief Création d'une classe Livre, enfant de Media   
+# @param  la base de donnée et l'id du livre à créer   
+#    
 class Livre(Media):
     def __init__(self,db, id=""):
         #appelle fonction constructeur de média
         super().__init__(db, id)
-        self.setType("Book")
+        self.type="Book"
         self.publisher=""
+    #fonction pour ajout maison d'edition à livre
     def setPublisher(self,name):
         self.publisher=name
     def save(self):
+        #insertion de lu livre dans la bd MongoDB
         #possibilité rajouter un if else selon bd appelée
-        self.db.insert_one({ "type": self.type, "title" : self.title, "year":self.year, "authors": self.auteur,"publisher":self.publisher})
-
-
+        self._db.insert_one({ "type": self.type, "title" : self.title, "year":self.year, "authors": self.auteur,"publisher":self.publisher})
+#
+# @brief Création d'une classe Article, enfant de Media   
+# @param  la base de donnée et l'id de l'article à créer 
+#
 class Article(Media):
     def __init__(self,db,id=""):
+        #appelle fonction constructeur de média
         super().__init__(db,id)
-        self.setType("Article")
+        self.type="Article"
         self.booktitle=""
+    #fonction pour ajout revue qui a publié article
     def setBooktitle(self,name):
         self.booktitle=name
     def save(self):
-        self.db.insert_one({ "type": self.type, "title" : self.title, "year":self.year, "authors": self.auteur,"booktile":self.booktitle})
-
+        #insertion de l'article dans la bd MongoDB
+        self._db.insert_one({ "type": self.type, "title" : self.title, "year":self.year, "authors": self.auteur,"booktitle":self.booktitle})
