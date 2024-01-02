@@ -6,7 +6,7 @@ class Menuprincipal():
 	def __init__(self):
 		self.box=False
 		
-	def affiche(self,choix):
+	def afficheMenuprincipal(self,choix):
 		if choix==1:
 			col=1
 		else:
@@ -37,8 +37,6 @@ class Menuprincipal():
 		curses.start_color()
 		curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
 		curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_BLUE)
-		
-
 		# Efface tout l'ecran
 		win.clear()
 
@@ -75,7 +73,7 @@ class Menuprincipal():
 
 		# Intitule de la zone de saisie
 		self.box.addstr(2, 3, " Faites votre choix dans ce menu :")
-		self.affiche(1)
+		self.afficheMenuprincipal(1)
 		self.box.refresh()
 
 		# Boucle pour lire la saisie clavier du champ "nom"
@@ -88,7 +86,7 @@ class Menuprincipal():
 				choix-=1
 			elif k==curses.KEY_DOWN and choix<4:
 				choix+=1
-			self.affiche(choix)
+			self.afficheMenuprincipal(choix)
 		curses.endwin()
 		# Si la touche "Entree" a ete pressee
 		if k in [10,13, curses.KEY_ENTER]:

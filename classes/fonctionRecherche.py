@@ -5,6 +5,7 @@ from classes.livres import *
 import sys
 import curses
 from curses import wrapper
+from menurecherche import *
 #
 # @brief fonction qui affiche un menu en fin d'opération 
 # @param la base de données (bibli) et le résultat de la sélection à filtrer (publi)
@@ -42,7 +43,10 @@ def rechercherMedia(bibli,result):
     while True:
         try:
             if selection == 0:
-                selection=int(input("Voulez-vous choisir par:\n 1- Titre : \n 2- Auteur : \n 3- Année de parution : \n"))
+                menu=Menurecherche()
+                selection=menu.open()
+                print(selection)
+                #selection=int(input("Voulez-vous choisir par:\n 1- Titre : \n 2- Auteur : \n 3- Année de parution : \n"))
                 if selection<=0 or selection>3:
                     raise ValueError
         except ValueError:

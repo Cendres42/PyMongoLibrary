@@ -8,7 +8,8 @@ from bson.objectid import ObjectId
 from classes.livres import *
 from bson.errors import InvalidId
 from classes.fonctionSuppression import *
-from main2 import *
+from menuprincipal import *
+from menurecherche import *
 
 # création des variables liées à la base de donnnées
 client = MongoClient("localhost",27017)
