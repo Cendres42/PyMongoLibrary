@@ -32,9 +32,10 @@ def Menu():
             print("Votre choix doit être un chiffre entre 1 et 4")
         else:    
             if choix==1:
-                rechercherMedia(bibli,result)
+                rechercherMedia(bibli)
             elif choix==2:
-                ajouterPubli(bibli)
+                menu=MenuAjout()
+                menu.open(bibli)
             elif choix==3:
                 supprimerPubli(bibli)
             elif choix==4:

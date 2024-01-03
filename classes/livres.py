@@ -207,7 +207,7 @@ class Media():
 
     # création méthode magique __repr__ pour affichage données objet
     def __repr__(self):
-        return(f"\nType : {self.type}\n Titre : {self.title}\n Auteur : {self.auteur}\n Année de parution : {self.year}\n")
+        return(f"\nType : {self.type}\n Titre : {self.title}\n Auteur : {self.auteur}\n Année de parution : {self.year}\n ------------------------------\n")
 #
 # @brief Création d'une classe Livre, enfant de Media   
 # @param  la base de donnée et l'id du livre à créer   
