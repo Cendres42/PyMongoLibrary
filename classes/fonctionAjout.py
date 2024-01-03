@@ -155,9 +155,9 @@ class MenuAjout():
             key = win.getch()
 
             if choix==1:
-                bibli.createBook(titre,auteur,year)
+                bibli.createBook(titre,auteur,int(year))
             elif choix==2:
-                bibli.createArticle(titre,auteur,year)
+                bibli.createArticle(titre,auteur,int(year))
         # Wait key-press before end of program
         #key = win.getch()
 

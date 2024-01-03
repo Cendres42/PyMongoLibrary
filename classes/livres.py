@@ -31,18 +31,15 @@ class Bibliotheque():
     
     # @brief méthode   qui supprime des publis à partir de leur auteur
     def removeMediabyAuteur(self,auteur):
-        result=self.db.delete_many({ "authors": auteur})
-        return result.deleted_count
+        self.db.delete_many({ "authors": auteur})
     
     # @brief méthode   qui supprime une publi à partie de son titre  
     def removeMediabyTitre(self,titre):
-        result=self.db.delete_one({ "title": titre})
-        return result.deleted_count
+        self.db.delete_one({ "title": titre})
     
     # @brief méthode   qui supprime des publis à partir de leur auteur
     def removeMediabyMulti(self,auteur,year):
-        result=self.db.delete_many({ "authors": auteur,"year": year})
-        return result.deleted_count
+        self.db.delete_many({ "authors": auteur,"year": year})
 
     # @brief méthode   qui affiche les 5 premières publis à partir de leur titre
     def findByTitle(self,selec,tri,toSkip,tofiltre="",filtre=""):

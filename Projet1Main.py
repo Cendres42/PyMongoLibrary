@@ -43,19 +43,3 @@ def Menu():
 
         
 Menu()
-
-"""
-pipe = []
-tofiltre="year"
-filtre="2023"
-pipe.append({"$project":{"type":1,"title":1,"authors":1,"year":1}})
-pipe.append({"$match": {"authors":{"$regex":"kiki"}}})
-pipe.append({"$match": {tofiltre:filtre}})
-pipe.append({"$sort":{"title":1}})
-pipe.append({"$skip":0})
-pipe.append({"$limit":5})
-query2=coll.aggregate(pipe)
-for item in query2:
-    pprint.pprint(item) 
-
-"""
