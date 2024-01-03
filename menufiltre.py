@@ -121,6 +121,7 @@ class MenuFiltre():
 			tofiltre="title"
 		elif typefiltre==3:
 			tofiltre="year"
+			filtre=int(filtre)
 
 		return tofiltre,filtre
 	

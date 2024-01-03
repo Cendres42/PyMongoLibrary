@@ -8,17 +8,6 @@ from curses import wrapper
 from menurecherche import *
 from menufiltre import *
 from menuchoice import *
-#
-# @brief fonction qui affiche un menu en fin d'opération 
-# @param la base de données (bibli) et le résultat de la sélection à filtrer (publi)
-#
-
-
-
-
-
-
-#
 # @brief fonction qui affiche les données recherchée par auteur, titre ou année de parution
 # @param la base de données (bibli)
 #
@@ -36,8 +25,6 @@ def rechercherMedia(bibli):
             if selection == 0:
                 menu=Menurecherche()
                 selection,sous_selection,tri=menu.open()
-                #print(selection,sous_selection,tri)
-                #selection=int(input("Voulez-vous choisir par:\n 1- Titre : \n 2- Auteur : \n 3- Année de parution : \n"))
             if selection<=0 or selection>3:
                     raise ValueError
         except ValueError:
@@ -45,6 +32,8 @@ def rechercherMedia(bibli):
             break   
         
         else:
+            if tri==4:
+                return
             if selection== 2:
                 if typefiltre!="":
                     publi=bibli.findByTitle(sous_selection,tri,toSkip,typefiltre,filtre)
@@ -54,18 +43,18 @@ def rechercherMedia(bibli):
                     print(publi)
             elif selection==1:
                 if typefiltre!="":
-                        publi=bibli.findByAuthors(sous_selection,tri,toSkip,typefiltre,filtre)
-                        print(publi)
+                    publi=bibli.findByAuthors(sous_selection,tri,toSkip,typefiltre,filtre)
+                    print(publi)
                 else:
                     publi=bibli.findByAuthors(sous_selection,tri,toSkip)
                     print(publi)
             elif selection==3:
                 if typefiltre!="":
-                        publi=bibli.findByYear(sous_selection,tri,toSkip,typefiltre,filtre)
-                        print(publi)
+                    publi=bibli.findByYear(int(sous_selection),tri,toSkip,typefiltre,filtre)
+                    print(publi)
                 else:
-                        publi=bibli.findByYear(sous_selection,tri,toSkip)
-                        print(publi)
+                    publi=bibli.findByYear(int(sous_selection),tri,toSkip)
+                    print(publi)
            
             try:
                 next=int(input("Pour afficher les 5 résultats suivants tapez 1 \n sinon tapez 2\n"))
@@ -93,68 +82,4 @@ def rechercherMedia(bibli):
                         menu=MenuFiltre()
                         typefiltre,filtre=menu.open()
                         print(f"\n -----------------------------------\n Voici le résulat de votre filtre :")
-                        #result2=result.split(":")
-                        #typefiltre=result2[0]
-                        #filtre=result2[1]
-   
-   
-"""
-#
-# @brief fonction qui affiche les données filtrées par auteur, titre ou année de parution
-# @param la base de données (bibli) et le résultat de la sélection à filtrer (publi)
-#
-def filtreMedia():
-    result=""
-    while True:
-        try:
-            filtre=int(input("Par quoi voulez-vous filtrer vos résultats ? \n 1- Par auteur : \n 2- Par année de parution : \n 3- Par titre\n"))
-            if filtre<=0 or filtre>3:
-                raise ValueError
-            break
-        except ValueError:
-            print("Votre saisie doit être un chiffre entre 1 et 3")
-    if filtre==1:
-        auteur=input("Saisissez le nom complet de l'auteur pour filtrer : ")
-        result="authors:"+ auteur
-    elif filtre==2:
-        year=input("Saisissez l'année de parution pour filtrer : ")
-        result="year:"+year
-    elif filtre==3:
-        title=input("Saisissez le titre ou une partie du titre pour filtrer: ")
-        result="title:"+title
-    return result
-
-
-
-
-        if selection==1:
-            try:
-                if sous_selection == "":
-                    sous_selection=input("Entrez le titre du livre ou une partie du titre: ")
-            except ValueError:
-                print("Votre saisie est incorrecte")
-            
-        elif selection==2:
-            try:
-                if sous_selection == "":
-                    sous_selection=input("Entrez l'auteur du livre : ")
-            except ValueError:
-                print("Votre saisie est incorrecte")
-                  
-        elif selection==3:
-            try:
-                if sous_selection == "":
-                    sous_selection=int(input("Entrez l'année de parution : "))
-            except ValueError:
-                print("Votre saisie est incorrecte")
-                
-        try:            
-            if tri == 0:
-                tri=int(input("Pour trier par auteur, tapez 1,\n pour trier par année de parution, tapez 2,\n pour trier par titre, tapez 3,\n pour ne pas trier, tapez 4\n"))
-                if selection<=0 or selection>4:
-                    raise ValueError
-        except ValueError:
-            print("Votre saisie doit être un chiffre entre 1 et 4")
-            break"""
-
-
+                      

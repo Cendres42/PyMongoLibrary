@@ -43,11 +43,11 @@ class MenuSuppression():
 
         # Ajoute un titre a la fenetre (avec bordures)
         self.box.addch(0,2, curses.ACS_RTEE)
-        self.box.addstr(0, 3, " Suppression d'une publication : ")
+        self.box.addstr(0, 3, " Suppression d'une publication ")
         self.box.addstr(2, 3, "Complétez le ou les champs ci-dessous. ")
         self.box.addstr(4, 3, "Appuyez sur entrée pour valider votre saisie. ")
 
-        self.box.addch(0, 29, curses.ACS_LTEE)
+        self.box.addch(0, 34, curses.ACS_LTEE)
 
         # Rafraichit la fenetre
         self.box.refresh()
@@ -142,8 +142,8 @@ class MenuSuppression():
                     self.box.addch(13, 8+pos, k, curses.color_pair(1))
                     auteur += chr(k)    
                     pos += 1	
-                if year!="":
-                    year=int(year)	
+        if year!="":
+            year=int(year)	
         return id,titre,year,auteur
 #
 # @brief fonction qui permet la suppression d'une publication à partir de son identifiant

@@ -39,7 +39,7 @@ class Menuchoice():
 		# Ajoute un titre a la fenetre (avec bordures)
 		self.box.addch(0,2, curses.ACS_RTEE)
 		self.box.addstr(0, 3, " Menu secondaire ")
-		self.box.addch(0, 19, curses.ACS_LTEE)
+		self.box.addch(0, 20, curses.ACS_LTEE)
 
 		# Rafraichit la fenetre
 		self.box.refresh()

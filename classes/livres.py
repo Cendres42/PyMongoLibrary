@@ -23,7 +23,6 @@ class Bibliotheque():
         objet.title=title
         objet.auteur=auteur
         objet.year=year
-        print(objet.title,objet.auteur,objet.year)
     
     # @brief méthode   qui supprime une publi à partir de son id 
     def removeMediabyID(self,id):
@@ -48,7 +47,7 @@ class Bibliotheque():
         pipe.append({"$project":{"type":1,"title":1,"authors":1,"year":1}})
         pipe.append({"$match": {"title":{"$regex":selec}}})
         if filtre!="":
-            pipe.append({"$match": {tofiltre:filtre}})
+            pipe.append({"$match": {tofiltre:{"$regex":filtre}}})
         if tri==1:
             pipe.append({"$sort":{"authors":1}})
         elif tri==2:
@@ -204,7 +203,13 @@ class Media():
 
     # création méthode magique __repr__ pour affichage données objet
     def __repr__(self):
-        return(f"\nType : {self.type}\n Titre : {self.title}\n Auteur : {self.auteur}\n Année de parution : {self.year}\n ------------------------------\n")
+        result = ""
+        if (type(self.auteur) is str):
+            result += self.auteur
+        elif (type(self.auteur) is list):
+            for a in self.auteur:
+                result+=" " + a + " "
+        return(f"\nType : {self.type}\n Titre : {self.title}\n Auteur : {result}\n Année de parution : {self.year}\n ------------------------------\n")
 #
 # @brief Création d'une classe Livre, enfant de Media   
 # @param  la base de donnée et l'id du livre à créer   
