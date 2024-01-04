@@ -1,5 +1,5 @@
 from bson.objectid import ObjectId
-
+import colorama
 #Création d'une classe Bibliothèque  
 
 class Bibliotheque():
@@ -203,13 +203,15 @@ class Media():
 
     # création méthode magique __repr__ pour affichage données objet
     def __repr__(self):
-        result = ""
+        colorama.init()
+        result = "\033[1m"
         if (type(self.auteur) is str):
             result += self.auteur
         elif (type(self.auteur) is list):
             for a in self.auteur:
                 result+=" " + a + " "
-        return(f"\nType : {self.type}\n Titre : {self.title}\n Auteur : {result}\n Année de parution : {self.year}\n ------------------------------\n")
+        result+="\033[0m"
+        return(f"\nType : {self.type}\n Titre : {self.title}\n Auteur : {result}\n Année de parution : {self.year}\n \033[36m------------------------------\033[0m\n")
 #
 # @brief Création d'une classe Livre, enfant de Media   
 # @param  la base de donnée et l'id du livre à créer   

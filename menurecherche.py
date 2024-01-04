@@ -170,7 +170,7 @@ class Menurecherche():
 		choix = 1
 		while True:
 			k = self.box.getch()
-			if k in [27, 10,13,curses.KEY_ENTER] or choix==4 :
+			if k in [27, 10,13,curses.KEY_ENTER] :
 				break
 			elif k==curses.KEY_UP and choix>=2:
 				choix-=1
