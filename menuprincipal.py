@@ -5,7 +5,10 @@ from curses import wrapper
 class Menuprincipal():
 	def __init__(self):
 		self.box=False
-		
+ 	#
+    # @brief méthode proposant un menu pour choisir une action
+    # @param le choix à un instant t
+    #	
 	def afficheMenuprincipal(self,choix):
 		if choix==1:
 			col=1
@@ -28,7 +31,10 @@ class Menuprincipal():
 			col=2
 		self.box.addstr(7,3," Quitter l'application ",curses.color_pair(col))
 		self.box.refresh()
-
+	#
+    # @brief méthode proposant un menu pour choisir une action
+    # @return le choix final de l'action
+    #
 	def open(self):
 		win = curses.initscr()
 		curses.curs_set(0)

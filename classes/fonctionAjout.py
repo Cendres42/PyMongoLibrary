@@ -10,7 +10,10 @@ from curses import wrapper
 class MenuAjout():
     def __init__(self):
          self.box=False
-
+    #
+    # @brief méthode proposant un menu pour l'ajout d'un publication
+    # @param la base de donnée et le type de publi insérée (livre ou article)
+    #
     def precisionPubli(self,bibli,choix):
         win = curses.initscr()
         # Par defaut, le curseur est masque
@@ -159,10 +162,11 @@ class MenuAjout():
             elif choix==2:
                 bibli.createArticle(titre,auteur,int(year))
         # Wait key-press before end of program
-        #key = win.getch()
-
         curses.endwin()
-
+    #
+    # @brief méthode proposant un menu pour choisir le type de publication à ajouter
+    # @param le type de publi sélectionné à un instant t (livre ou article)
+    #
     def afficheMenuAjout(self,choix):
         if choix==1:
             col=1

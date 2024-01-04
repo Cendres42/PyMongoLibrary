@@ -5,7 +5,10 @@ from curses import wrapper
 class Menurecherche():
 	def __init__(self):
 		self.box=False
-
+	#
+    # @brief méthode proposant un menu pour choisir un type de recherche
+    # @param le choix à un instant t
+    #
 	def afficheMenuMixte(self,choix):
 		if choix==1:
 			col=1
@@ -27,7 +30,10 @@ class Menurecherche():
         # Affiche une zone noire pour montrer la zone de saisie
 		self.box.addstr(9, 23, "                ", curses.color_pair(1))
 		self.box.refresh()
-
+	#
+    # @brief méthode proposant un menu pour choisir un type de recherche
+    # @return le choix final du type de recherche
+    #
 	def open(self):
 		win = curses.initscr()
 		curses.curs_set(0)
@@ -116,6 +122,10 @@ class Menurecherche():
 		
 		return choix,sous_selection,tri
 	
+	#
+    # @brief méthode proposant un menu pour choisir un tri
+    # @return le choix du tri à un instant t
+    #
 	def afficheMenuTri(self,choix):
 		if choix==1:
 			col=1
@@ -137,7 +147,10 @@ class Menurecherche():
 		else:
 			col=2
 		self.box.addstr(7,3," Revenir au menu principal ",curses.color_pair(col))
-
+	#
+    # @brief méthode proposant un menu pour choisir un tri
+	# @return le choix final du type de tri
+	#
 	def open2(self):
 		width  = 50  # Largeur de la fenetre
 		height = 14   # Hauteur de la fenetre

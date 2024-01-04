@@ -8,10 +8,12 @@ from curses import wrapper
 from menurecherche import *
 from menufiltre import *
 from menuchoice import *
+import colorama
+
+#
 # @brief fonction qui affiche les données recherchée par auteur, titre ou année de parution
 # @param la base de données (bibli)
 #
-
 def rechercherMedia(bibli):
     selection = 0
     tri = 0
@@ -32,29 +34,25 @@ def rechercherMedia(bibli):
             break   
         
         else:
+            colorama.init()
             if tri==4:
                 return
             if selection== 2:
                 if typefiltre!="":
                     publi=bibli.findByTitle(sous_selection,tri,toSkip,typefiltre,filtre)
-                    print(publi)
                 else:
                     publi=bibli.findByTitle(sous_selection,tri,toSkip)
-                    print(publi)
             elif selection==1:
                 if typefiltre!="":
                     publi=bibli.findByAuthors(sous_selection,tri,toSkip,typefiltre,filtre)
-                    print(publi)
                 else:
                     publi=bibli.findByAuthors(sous_selection,tri,toSkip)
-                    print(publi)
             elif selection==3:
                 if typefiltre!="":
                     publi=bibli.findByYear(int(sous_selection),tri,toSkip,typefiltre,filtre)
-                    print(publi)
                 else:
                     publi=bibli.findByYear(int(sous_selection),tri,toSkip)
-                    print(publi)
+            print(publi)
            
             try:
                 next=int(input("Pour afficher les 5 résultats suivants tapez 1 \n sinon tapez 2\n"))
@@ -81,5 +79,6 @@ def rechercherMedia(bibli):
                         toSkip=0
                         menu=MenuFiltre()
                         typefiltre,filtre=menu.open()
-                        print(f"\n -----------------------------------\n Voici le résulat de votre filtre :")
+                        print(f"-----------------------------------\n \033[46m Voici le résulat de votre filtre :\033[0m\n")
+    
                       

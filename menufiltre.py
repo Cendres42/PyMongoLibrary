@@ -5,7 +5,10 @@ from curses import wrapper
 class MenuFiltre():
 	def __init__(self):
 		self.box=False
-
+	#
+    # @brief méthode proposant un menu pour choisir un filtre
+    # @param le choix à un instant t
+    #	
 	def afficheMenuFiltre(self,typefiltre):
 		if typefiltre==1:
 			col=1
@@ -31,7 +34,10 @@ class MenuFiltre():
         # Affiche une zone noire pour montrer la zone de saisie
 		self.box.addstr(9, 23, "                ", curses.color_pair(1))
 		self.box.refresh()
-		
+	#
+    # @brief méthode proposant un menu pour choisir uu filtre
+    # @return le choix final du filtre
+    #	
 	def open(self):
 		win = curses.initscr()
 		curses.curs_set(0)

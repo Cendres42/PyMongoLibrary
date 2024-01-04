@@ -9,7 +9,10 @@ from curses import wrapper
 class MenuSuppression():
     def __init__(self):
          self.box=False
-
+    #
+    # @brief méthode proposant un menu pour supprimer une publication
+    # @return les infos pour la suppression:  id,titre,year,auteur
+    #
     def precisionPubli(self):
         win = curses.initscr()
         # Par defaut, le curseur est masque
@@ -146,7 +149,7 @@ class MenuSuppression():
             year=int(year)	
         return id,titre,year,auteur
 #
-# @brief fonction qui permet la suppression d'une publication à partir de son identifiant
+# @brief fonction qui permet la suppression d'une publication à partir des infos entrées
 # @param la base de donnée "bibli"
 #  
 def supprimerPubli(bibli):

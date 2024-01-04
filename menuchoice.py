@@ -5,7 +5,10 @@ from curses import wrapper
 class Menuchoice():
 	def __init__(self):
 		self.box=False
-		
+	#
+    # @brief méthode proposant un menu pour choisir une nouvelle action
+	# @param le choix à un instant t
+    #	
 	def afficheMenuSec(self,choix):
 		if choix==1:
 			col=1
@@ -23,7 +26,10 @@ class Menuchoice():
 			col=2
 		self.box.addstr(6,3," Revenir au menu principal ",curses.color_pair(col))
 
-
+	#
+    # @brief méthode proposant un menu pour choisir une nouvelle action
+	 # @return le choix final de l'action
+    #	
 	def open2(self):
 		width  = 50  # Largeur de la fenetre
 		height = 14   # Hauteur de la fenetre

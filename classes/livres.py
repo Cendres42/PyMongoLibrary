@@ -1,48 +1,63 @@
 from bson.objectid import ObjectId
-import colorama
 #Création d'une classe Bibliothèque  
 
 class Bibliotheque():
     def __init__(self,db):
         self.db=db
-    
+    #
     # @brief une bibliothèque peut créer des livres
+    # @param titre, auteur et année de publication
+    #
     def createBook(self,title,auteur,year):
         livre=Livre(self.db)
         self.filMedia(livre,title,auteur,year)
         livre.save()
-    
+    #
     # @brief une bibliothèque peut créer des articles
+    # @param titre, auteur et année de publication
+    #
     def createArticle(self,title,auteur,year):
         article=Article(self.db)
         self.filMedia(article,title,auteur,year)
         article.save()
-    
+    #
     # @brief méthode qui remplit un objet avec les inputs communs à tous les médias
+    # @param type de publication, titre, auteur et année de publication
+    #
     def filMedia(self,objet,title,auteur,year):
         objet.title=title
         objet.auteur=auteur
         objet.year=year
-    
+    #
     # @brief méthode   qui supprime une publi à partir de son id 
+    # @param id de la publication
+    #
     def removeMediabyID(self,id):
         self.db.delete_one({ "_id": ObjectId(id)})
-    
+    #
     # @brief méthode   qui supprime des publis à partir de leur auteur
+    # @param auteur(s) de la publication
+    #
     def removeMediabyAuteur(self,auteur):
         self.db.delete_many({ "authors": auteur})
-    
-    # @brief méthode   qui supprime une publi à partie de son titre  
+    #
+    # @brief méthode   qui supprime une publi à partie de son titre 
+    # @param titre de la publication
+    # 
     def removeMediabyTitre(self,titre):
         self.db.delete_one({ "title": titre})
     
     # @brief méthode   qui supprime des publis à partir de leur auteur
     def removeMediabyMulti(self,auteur,year):
         self.db.delete_many({ "authors": auteur,"year": year})
-
-    # @brief méthode   qui affiche les 5 premières publis à partir de leur titre
+    #
+    # @brief méthode   qui récupère les 5 premières publis à partir de leur titre
+    # @param titre, type de tri, nb de page à passer, type filtre et valeur de filtre
+    # @return le tableau des 5 premières publications à afficher
+    #
     def findByTitle(self,selec,tri,toSkip,tofiltre="",filtre=""):
         # Construit le pipeline d'agregate mongo
+        result=0
         pipe = []
         pipe.append({"$project":{"type":1,"title":1,"authors":1,"year":1}})
         pipe.append({"$match": {"title":{"$regex":selec}}})
@@ -54,9 +69,15 @@ class Bibliotheque():
             pipe.append({"$sort":{"year":1}})
         elif tri==3:
             pipe.append({"$sort":{"title":1}})
+        query1=self.db.aggregate(pipe)
+        for i in query1:
+            nbResult+=1
+        nbResult=str(nbResult)
         pipe.append({"$skip":toSkip})
         pipe.append({"$limit":5})
         query2=self.db.aggregate(pipe)
+        # affichage du nombre de résultats trouvés avant limite à 5
+        print(f'\033[41m Votre recherche a donné  {nbResult} résultat(s).\033[0m')
 
         publi_tab=[]
         for item in query2:
@@ -68,10 +89,14 @@ class Bibliotheque():
                 continue
             publi_tab.append(new_publi)    
         return publi_tab
-    
+    #
     # @brief méthode   qui affiche les 5 premières publis à partir de leur auteur
+    # @param titre, type de tri, nb de page à passer, type filtre et valeur de filtre
+    # @return le tableau des 5 premières publications à afficher
+    #
     def findByAuthors(self,selec,tri,toSkip,tofiltre="",filtre=""):
         # Construit le pipeline d'agregate mongo
+        nbResult=0
         pipe = []
         pipe.append({"$project":{"type":1,"title":1,"authors":1,"year":1}})
         pipe.append({"$match": {"authors":selec}})
@@ -83,9 +108,15 @@ class Bibliotheque():
             pipe.append({"$sort":{"year":1}})
         elif tri==3:
             pipe.append({"$sort":{"title":1}})
+        query1=self.db.aggregate(pipe)
+        for i in query1:
+            nbResult+=1
+        nbResult=str(nbResult)
         pipe.append({"$skip":toSkip})
         pipe.append({"$limit":5})
         query2=self.db.aggregate(pipe)
+        # affichage du nombre de résultats trouvés avant limite à 5
+        print(f'\033[41m Votre recherche a donné  {nbResult} résultat(s).\033[0m')
 
         publi_tab=[]
         for item in query2:
@@ -97,11 +128,15 @@ class Bibliotheque():
                 continue
             publi_tab.append(new_publi)  
         return publi_tab
-    
+    #
     # @brief méthode   qui affiche les 5 premières publis à partir de leur année de publi
+    # @param titre, type de tri, nb de page à passer, type filtre et valeur de filtre
+    # @return le tableau des 5 premières publications à afficher
+    #
     def findByYear(self,selec,tri,toSkip,tofiltre="",filtre=""):
         # création nouvelle recherche
         # Construit le pipeline d'agregate mongo
+        nbResult=0
         pipe = []
         pipe.append({"$project":{"type":1,"title":1,"authors":1,"year":1}})
         pipe.append({"$match": {"year":selec}})
@@ -113,9 +148,15 @@ class Bibliotheque():
             pipe.append({"$sort":{"year":1}})
         elif tri==3:
             pipe.append({"$sort":{"title":1}})
+        query1=self.db.aggregate(pipe)
+        for i in query1:
+            nbResult+=1
+        nbResult=str(nbResult)
         pipe.append({"$skip":toSkip})
         pipe.append({"$limit":5})
         query2=self.db.aggregate(pipe)
+        # affichage du nombre de résultats trouvés avant limite à 5
+        print(f'\033[41m Votre recherche a donné  {nbResult} résultat(s).\033[0m')
         
         publi_tab=[]
         for item in query2:
@@ -126,6 +167,7 @@ class Bibliotheque():
             else :
                 continue
             publi_tab.append(new_publi)  
+        
         return publi_tab
     
 #
@@ -148,6 +190,7 @@ class Media():
             self.title= obj["title"] 
             self.auteur=obj["authors"]
             self.year=obj["year"]
+
     #définition de properties pour type, titre, auteur et année de publi
     @property
     def type(self)->str:
@@ -203,8 +246,7 @@ class Media():
 
     # création méthode magique __repr__ pour affichage données objet
     def __repr__(self):
-        colorama.init()
-        result = "\033[1m"
+        result = "\033[44m"
         if (type(self.auteur) is str):
             result += self.auteur
         elif (type(self.auteur) is list):
@@ -222,11 +264,13 @@ class Livre(Media):
         super().__init__(db, id)
         self.type="Book"
         self.publisher=""
-    #fonction pour ajout maison d'edition à livre
+
+    # @brief méthode pour ajout maison d'edition à livre
     def setPublisher(self,name):
         self.publisher=name
+
+    #@brief méthode d'insertion du livre dans la bd MongoDB
     def save(self):
-        #insertion de lu livre dans la bd MongoDB
         #possibilité rajouter un if else selon bd appelée
         self._db.insert_one({ "type": self.type, "title" : self.title, "year":self.year, "authors": self.auteur,"publisher":self.publisher})
 #
