@@ -9,7 +9,7 @@ from menurecherche import *
 from menufiltre import *
 from menuchoice import *
 import colorama
-
+from stat_books import *
 #
 # @brief fonction qui affiche les données recherchée par auteur, titre ou année de parution
 # @param la base de données (bibli)
@@ -32,7 +32,6 @@ def rechercherMedia(bibli):
         except ValueError:
             print("Votre saisie doit être un chiffre entre 1 et 3")
             break   
-        
         else:
             colorama.init()
             if tri==4:
@@ -80,5 +79,6 @@ def rechercherMedia(bibli):
                         menu=MenuFiltre()
                         typefiltre,filtre=menu.open()
                         print(f"-----------------------------------\n \033[46m Voici le résulat de votre filtre :\033[0m\n")
-    
+                    elif x==3:
+                        graph()
                       

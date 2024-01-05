@@ -74,11 +74,30 @@ def graph():
     plt.show()
    
     
+#plt.savefig('C:/Users/Gwen/Desktop/Data/Maison/'+col+piece+".png", dpi=300, format="png")
+#graph()
 
-    #plt.savefig('C:/Users/Gwen/Desktop/Data/Maison/'+col+piece+".png", dpi=300, format="png")
-graph()
+#résalisation de stats avec mongo:
+    
+plop=coll.aggregate([{"$group":{"_id":"$type","nb":{"$sum":1}}}])
+plop=list(plop)
+for item in plop:
+    if item['_id']=='Phd':
+        nbPhd=item['nb']
+    if item['_id']=='Book':
+        nbBook=item['nb']
+    if item['_id']=='Article':
+        nbArticle=item['nb']
+#print(nbPhd,nbBook,nbArticle)
+nbMynPubliAnnuel=coll.aggregate([{"$group":{"_id":"$year","myn":{"$sum":1}}},{"$group":{"_id":"clef","moyenne":{"$avg":"$myn"}}}])
+nb=0
+somme=0
+for item in nbMynPubliAnnuel:
+    nb+=1
+    #print(round(item))
+    #somme+=item["myn"]
+#print(round(somme/nb))
+nbmynouvrageparauteur=coll.aggregate([{"$unwind":"$authors"},{"$group":{"_id":"$authors","myn":{"$sum":1}}},{"$sort":{"myn":-1}},{"$limit":5}])
 
 
-
-
-
+#print(coll.count_documents({}))

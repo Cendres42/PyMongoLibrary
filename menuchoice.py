@@ -24,7 +24,12 @@ class Menuchoice():
 			col=1
 		else:
 			col=2
-		self.box.addstr(6,3," Revenir au menu principal ",curses.color_pair(col))
+		self.box.addstr(6,3," Afficher les statistiques de la bibliothèque ",curses.color_pair(col))
+		if choix==4:
+			col=1
+		else:
+			col=2
+		self.box.addstr(7,3," Revenir au menu principal ",curses.color_pair(col))
 
 	#
     # @brief méthode proposant un menu pour choisir une nouvelle action
@@ -66,7 +71,7 @@ class Menuchoice():
 				break
 			elif k==curses.KEY_UP and choix>=2:
 				choix-=1
-			elif k==curses.KEY_DOWN and choix<3:
+			elif k==curses.KEY_DOWN and choix<4:
 				choix+=1
 			self.afficheMenuSec(choix)
 
@@ -79,5 +84,7 @@ class Menuchoice():
 		elif choix==2:
 			return 2
 		elif choix==3:
+			return 3
+		elif choix==4:
 			return 0
 

@@ -57,12 +57,12 @@ class Bibliotheque():
     #
     def findByTitle(self,selec,tri,toSkip,tofiltre="",filtre=""):
         # Construit le pipeline d'agregate mongo
-        result=0
+        nbResult=0
         pipe = []
         pipe.append({"$project":{"type":1,"title":1,"authors":1,"year":1}})
         pipe.append({"$match": {"title":{"$regex":selec}}})
         if filtre!="":
-            pipe.append({"$match": {tofiltre:{"$regex":filtre}}})
+            pipe.append({"$match": {tofiltre:filtre}})
         if tri==1:
             pipe.append({"$sort":{"authors":1}})
         elif tri==2:
